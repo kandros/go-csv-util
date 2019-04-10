@@ -38,7 +38,7 @@ func csvToMovie(r io.Reader) ([]movie, error) {
 }
 
 func main() {
-	csvFile, err := ioutil.ReadFile("../movies.csv")
+	csvFile, err := ioutil.ReadFile("../../movies.csv")
 	if err != nil {
 		panic(err)
 	}

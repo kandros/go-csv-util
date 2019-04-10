@@ -6,15 +6,15 @@ import (
 )
 
 // CSVlines is a slice of slices that are columns from a csv
-type CSVlines [][]string
+type CSVline []string
 
 // ReadCSV tranforms a csv reader intro a slice of lines
-func ReadCSV(r io.Reader, comma, comment rune) (CSVlines, error) {
-	var records CSVlines
+func ReadCSV(r io.Reader, commaSymbol, commentSymbol rune) ([]CSVline, error) {
+	var records []CSVline
 
 	csvReader := csv.NewReader(r)
-	csvReader.Comma = comma
-	csvReader.Comment = comment
+	csvReader.Comma = commaSymbol
+	csvReader.Comment = commentSymbol
 
 	// Read the first line and consume it (this is the colums header)
 	_, err := csvReader.Read()
@@ -34,4 +34,27 @@ func ReadCSV(r io.Reader, comma, comment rune) (CSVlines, error) {
 	}
 
 	return records, nil
+}
+
+// WriteCSV write csv to a Writer
+func WriteCSV(headers []string, lines []CSVline, w io.Writer, commaSymbol rune) error {
+	writer := csv.NewWriter(w)
+	writer.Comma = commaSymbol
+
+	// add columns headers
+	err := writer.Write(headers)
+	if err != nil {
+		return err
+	}
+
+	for _, l := range lines {
+		err := writer.Write(l)
+		if err != nil {
+			return err
+		}
+	}
+
+	writer.Flush()
+
+	return nil
 }

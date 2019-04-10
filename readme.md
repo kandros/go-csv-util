@@ -8,5 +8,5 @@ csv stuff in go
 
 ## Examples
 
-1 `cd examples`
+1 `cd examples/read`
 2 `go run main`
