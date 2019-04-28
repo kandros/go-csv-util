@@ -7,33 +7,47 @@ import (
 	"testing"
 )
 
-// func TestWriteCSV(t *testing.T) {
-// 	headers := []string{"cat name", "cat color"}
-// 	var writer bytes.Buffer
+func TestWriteCSV(t *testing.T) {
+	headers := []string{"cat name", "cat color"}
+	var writer bytes.Buffer
 
-// 	err := WriteCSV(headers, []CSVline{
-// 		[]string{"micio", "black"},
-// 		[]string{"micione", "orange"},
-// 	},
-// 		&writer, ',')
-// 	if err != nil {
-// 		t.Fatal(err)
-// 	}
+	err := WriteCSV(headers, []CSVline{
+		[]string{"micio", "black"},
+		[]string{"micione", "orange"},
+	},
+		&writer, ',')
+	if err != nil {
+		t.Fatal(err)
+	}
 
-// 	delimiter := []byte("\n")
-// 	for {
-// 		record, err := writer.Read(delimiter)
-// 		if err == io.EOF {
-// 			continue
-// 		} else if err != nil {
-// 			t.Fatal(err)
-// 		}
+	r, err := ioutil.ReadAll(&writer)
+	if err != nil {
+		panic(err)
+	}
 
-// 		if string(record) != "ciaone" {
-// 			t.Fatalf("\ngot:\n%v\nwant:\n %v", record, "ciaone")
-// 		}
-// 	}
-// }
+	got := string(r)
+	want := `cat name,cat color
+micio,black
+micione,orange
+`
+
+	if got != want {
+		t.Errorf("got \n '%s', \nwant\n '%s'", got, want)
+	}
+
+	// for {
+	// 	record, err := writer.Read(delimiter)
+	// 	if err == io.EOF {
+	// 		continue
+	// 	} else if err != nil {
+	// 		t.Fatal(err)
+	// 	}
+
+	// 	if string(record) != "ciaone" {
+	// 		t.Fatalf("\ngot:\n%v\nwant:\n %v", record, "ciaone")
+	// 	}
+	// }
+}
 
 func TestReadCSV(t *testing.T) {
 	csvFile, err := ioutil.ReadFile("./movies.csv")
